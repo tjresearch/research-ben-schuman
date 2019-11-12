@@ -1,12 +1,14 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
 import tkinter as tk
 import xlrd
-from tkinter import messagebox
-
 
 def run_network():
-    messagebox.showinfo("Result", "test")
+    model = tf.keras.Sequential()
 
-
+# Test comment
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master, width=1000, height=1000)

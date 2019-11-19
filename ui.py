@@ -33,6 +33,15 @@ def run_network(hidden, iters):
     optimize = tf.train.GradientDescentOptimizer(0.05)
     train = optimize.minimize(loss)
 
+    # Alternative
+
+    model = keras.Sequential()
+    model.add(32, 2) # 32 arbitrary for now
+    model.add(2, 4) # 4 arbitrary
+    model.add(4, 1) # 1 output (# of people)
+
+    model.train(optimize=sigmoid())
+
 
 class Application(tk.Frame):
     def __init__(self, master=None):

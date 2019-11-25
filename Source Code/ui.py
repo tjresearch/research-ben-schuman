@@ -4,6 +4,7 @@ from tensorflow import keras
 import tkinter as tk
 import xlrd
 import numpy as np
+from tensorflow_core.python.keras.activations import sigmoid
 
 
 def run_network(hidden, iters):
@@ -40,7 +41,9 @@ def run_network(hidden, iters):
     model.add(2, 4) # 4 arbitrary
     model.add(4, 1) # 1 output (# of people)
 
-    model.train(optimize=sigmoid())
+    model.train(optimize=sigmoid)
+
+    print(model.run(input=get_data())) #TODO: define get_data() function
 
 
 class Application(tk.Frame):

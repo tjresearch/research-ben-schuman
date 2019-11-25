@@ -15,5 +15,9 @@ for i in range(2, sheet.nrows):
        if disaster_type not in disaster_type_list:
            disaster_type_list.append(disaster_type)
 
+
+
+    # Export to ui/ui2.py in order to link data with neural network.
+
 print(category_list)
 print(disaster_type_list)

@@ -1,50 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-import tensorflow as tf
-from tensorflow import keras
 import tkinter as tk
 import xlrd
-import numpy as np
-from tensorflow_core.python.keras.activations import sigmoid
 
 
-def run_network(hidden, iters):
-    tf.reset_default_graph()
-    n = 1000  # Eventual parsing of datatypes, reconfiguring net right now
-    # Input/output placeholder
-    X = tf.placeholder(shape=(n, 2), dtype=tf.float64, name='X')
-    y = tf.placeholder(shape=(n, 1), dtyle=tf.float64, name='y')
-
-    # 3 layer model right now, 2 groups of weights
-
-    w1 = tf.Variable(np.random.rand(2, hidden), dtype=tf.float64)
-    w2 = tf.Variable(np.random.rand(hidden, 1), dtype=tf.float64)
-
-    # nn graph
-
-    l1 = tf.sigmoid(tf.matmul(X, w1))
-    trial = tf.sigmoid(tf.matmul(l1, w2))
-
-    # loss func
-
-    deltas = tf.square(trial - y)
-    loss = tf.reduce_sum(deltas)
-
-    # train nn
-
-    optimize = tf.train.GradientDescentOptimizer(0.05)
-    train = optimize.minimize(loss)
-
-    # Alternative
-
-    model = keras.Sequential()
-    model.add(32, 2) # 32 arbitrary for now
-    model.add(2, 4) # 4 arbitrary
-    model.add(4, 1) # 1 output (# of people)
-
-    model.train(optimize=sigmoid)
-
-    print(model.run(input=get_data())) #TODO: define get_data() function
-
+def run_network():
+    print("something")
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -56,7 +15,7 @@ class Application(tk.Frame):
 
 
     def create_widgets(self):
-        workbook = xlrd.open_workbook('idmc_disaster_all_dataset.xlsx')
+        workbook = xlrd.open_workbook('../Resources/idmc_disaster_all_dataset.xlsx')
         sheet = workbook.sheet_by_index(0)
         region_list = []
         for i in range(2, sheet.nrows):
@@ -73,6 +32,7 @@ class Application(tk.Frame):
         tkvar = tk.StringVar(self.master)
         tkvar.set(region_list[0])
         region_drop = tk.OptionMenu(self, tkvar, *region_list)
+        print(region_list)
         region_drop.grid(row=1, column=0)
 
         category_label = tk.Label(self, text="Pick Natural Disaster Type:")
@@ -80,8 +40,6 @@ class Application(tk.Frame):
 
         btn = tk.Button(self.master, text="Run Network", command=run_network)
         btn.grid(row=3, column=0)
-
-
 
         tkvar = tk.StringVar(self.master)
         tkvar.set("Flood")

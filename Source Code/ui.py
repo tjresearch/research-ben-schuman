@@ -3,7 +3,7 @@ import xlrd
 
 
 def run_network():
-    print("something")
+    print("do something")
 
 class Application(tk.Frame):
     def __init__(self, master=None):

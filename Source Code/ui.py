@@ -32,7 +32,6 @@ class Application(tk.Frame):
         tkvar = tk.StringVar(self.master)
         tkvar.set(region_list[0])
         region_drop = tk.OptionMenu(self, tkvar, *region_list)
-        print(region_list)
         region_drop.grid(row=1, column=0)
 
         category_label = tk.Label(self, text="Pick Natural Disaster Type:")

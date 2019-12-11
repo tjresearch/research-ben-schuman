@@ -1,6 +1,6 @@
 import xlrd, string
 
-workbook = xlrd.open_workbook('idmc_disaster_all_dataset.xlsx')
+workbook = xlrd.open_workbook('../Resources/idmc_disaster_all_dataset.xlsx')
 sheet = workbook.sheet_by_index(0)
 
 

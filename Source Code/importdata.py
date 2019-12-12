@@ -8,7 +8,7 @@ category_list = []
 disaster_type_list = []
 
 for i in range(2, sheet.nrows):
-   disaster_type = sheet.cell(i, 1).value
+   disaster_type = sheet.cell(i, 2).value
 
    if disaster_type is not None:
        disaster_type = string.capwords(disaster_type.lower())

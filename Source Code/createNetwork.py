@@ -1,16 +1,11 @@
-import tensorflow as tf
-from tensorflow import keras
+import string
+from joblib import dump, load
+import pickle
 import numpy as np
-import xlrd, string
-
+import xlrd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-
-# Machine Learning
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+import sys
 
 
 def create_mapped_dict(filepath):
@@ -47,11 +42,11 @@ def build_train_set(region_dict, disaster_dict):
         iso3_index = region_dict[iso3_code]
         disaster_index = disaster_dict[disaster_type]
 
-        region_arr = np.zeros(196)
-        disaster_arr = np.zeros(12)
+        reg = [iso3_index]
+        region_arr = np.asarray(reg)
 
-        region_arr[iso3_index] = 1
-        disaster_arr[disaster_index] = 1
+        dis = [disaster_index]
+        disaster_arr = np.asarray(dis)
 
         x_train.append(np.concatenate((region_arr, disaster_arr)))
         y_train.append(displacement)
@@ -70,11 +65,19 @@ def main():
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
 
-    svc_class = SVC(kernel='sigmoid')
-    svc_class.fit(X_train, y_train)
-    print(svc_class.score(X_test, y_test))
-    print(svc_class.predict(X_test))
-    print(y_test)
+    svc_class = load('../Resources/model.joblib')
+    # test_res = svc_class.predict(X_test)
+    np.set_printoptions(threshold=sys.maxsize)
+
+    diff = pickle.load(open('../Resources/diff.pkl', 'rb'))
+
+    total_acc = 0
+    for val in np.nditer(diff):
+        if abs(val) < 2500:
+            total_acc += 1
+
+    percent_acc = (total_acc / len(diff)) * 100
+    print(percent_acc, '%')
 
 
 if __name__ == '__main__':

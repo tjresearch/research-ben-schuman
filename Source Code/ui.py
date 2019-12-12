@@ -46,6 +46,7 @@ class Application(tk.Frame):
         category.grid(row=3, column=0)
 
 
+#TODO: add neural network to UI
 root = tk.Tk()
 app = Application(master=root)
 app.configure(background='blue')

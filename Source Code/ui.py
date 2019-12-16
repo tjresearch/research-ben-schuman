@@ -45,6 +45,16 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        conversion_wb = xlrd.open_workbook('../Resources/Country to ISO3.xlsx')
+        conversion_sheet = conversion_wb.sheet_by_index(0)
+        conversion_dict = {}
+
+        for i in range(0, conversion_sheet.nrows):
+            full = conversion_sheet.cell(i, 0)
+            short = conversion_sheet.cell(i, 1)
+
+            conversion_dict[full] = short
+
         workbook = xlrd.open_workbook('../Resources/idmc_disaster_all_dataset.xlsx')
         sheet = workbook.sheet_by_index(0)
         region_list = []
@@ -55,6 +65,8 @@ class Application(tk.Frame):
                 region = region.upper()
                 if region not in region_list:
                     region_list.append(region)
+
+        print(len(region_list))
 
         region_label = tk.Label(self, text="Pick Region (ISO3):")
         region_label.grid(row=0, column=0)

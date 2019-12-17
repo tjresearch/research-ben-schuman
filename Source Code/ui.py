@@ -35,8 +35,6 @@ def run_network(region_text, disaster_text):
     tk.messagebox.showinfo("Result", str(int(svc_class.predict(inputs)[0])) + ' People')
 
 
-
-
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master, width=1000, height=1000)
@@ -48,12 +46,16 @@ class Application(tk.Frame):
         conversion_wb = xlrd.open_workbook('../Resources/Country to ISO3.xlsx')
         conversion_sheet = conversion_wb.sheet_by_index(0)
         conversion_dict = {}
+        conversion_swapped = {}
 
         for i in range(0, conversion_sheet.nrows):
             full = conversion_sheet.cell(i, 0)
             short = conversion_sheet.cell(i, 1)
 
             conversion_dict[full] = short
+            conversion_swapped[short] = full
+
+        print(conversion_swapped.values())
 
         workbook = xlrd.open_workbook('../Resources/idmc_disaster_all_dataset.xlsx')
         sheet = workbook.sheet_by_index(0)
@@ -66,6 +68,11 @@ class Application(tk.Frame):
                 if region not in region_list:
                     region_list.append(region)
 
+        full_region_list = []
+
+        for region in region_list:
+            full_region_list.append(conversion_swapped[region])
+
         print(len(region_list))
 
         region_label = tk.Label(self, text="Pick Region (ISO3):")
@@ -73,7 +80,7 @@ class Application(tk.Frame):
 
         tkvar = tk.StringVar(self.master)
         tkvar.set(region_list[0])
-        region_drop = tk.OptionMenu(self, tkvar, *region_list)
+        region_drop = tk.OptionMenu(self, tkvar, *full_region_list)
         region_drop.grid(row=1, column=0)
 
         category_label = tk.Label(self, text="Pick Natural Disaster Type:")
@@ -86,15 +93,10 @@ class Application(tk.Frame):
                                  'Mass Movement', 'Volcanic Activity', 'Severe Winter Condition')
         category.grid(row=3, column=0)
 
-        btn = tk.Button(self.master, text="Run Network", command=lambda:run_network(tkvar.get(), tkvar2.get()))
+        btn = tk.Button(self.master, text="Run Network", command=lambda:run_network(conversion_dict[tkvar.get()], tkvar2.get()))
         btn.grid(row=3, column=0)
 
 
-
-
-
-
-#TODO: add neural network to UI
 root = tk.Tk()
 app = Application(master=root)
 app.configure(background='blue')

@@ -35,7 +35,7 @@ def build_train_set(region_dict, disaster_dict):
         disaster_type = sheet.cell(i, 6).value
         displacement = sheet.cell(i, 7).value
 
-        if iso3_code is None or disaster_type is None or displacement is None or displacement == '':
+        if iso3_code is None or disaster_type is None or disaster_type == '' or displacement is None or displacement == '':
             continue
         disaster_type = string.capwords(disaster_type.lower())
 
@@ -65,19 +65,8 @@ def main():
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
 
-    svc_class = load('../Resources/model.joblib')
-    # test_res = svc_class.predict(X_test)
-    np.set_printoptions(threshold=sys.maxsize)
-
-    diff = pickle.load(open('../Resources/diff.pkl', 'rb'))
-
-    total_acc = 0
-    for val in np.nditer(diff):
-        if abs(val) < 2500:
-            total_acc += 1
-
-    percent_acc = (total_acc / len(diff)) * 100
-    print(percent_acc, '%')
+    svc_class = SVC(kernel='sigmoid')
+    svc_class.fit(X_train, y_train)
 
 
 if __name__ == '__main__':

@@ -49,13 +49,12 @@ class Application(tk.Frame):
         conversion_swapped = {}
 
         for i in range(0, conversion_sheet.nrows):
-            full = conversion_sheet.cell(i, 0)
-            short = conversion_sheet.cell(i, 1)
+            full = conversion_sheet.cell(i, 0).value
+            short = conversion_sheet.cell(i, 1).value
 
             conversion_dict[full] = short
             conversion_swapped[short] = full
 
-        print(conversion_swapped.values())
 
         workbook = xlrd.open_workbook('../Resources/idmc_disaster_all_dataset.xlsx')
         sheet = workbook.sheet_by_index(0)
@@ -73,13 +72,11 @@ class Application(tk.Frame):
         for region in region_list:
             full_region_list.append(conversion_swapped[region])
 
-        print(len(region_list))
-
         region_label = tk.Label(self, text="Pick Region (ISO3):")
         region_label.grid(row=0, column=0)
 
         tkvar = tk.StringVar(self.master)
-        tkvar.set(region_list[0])
+        tkvar.set(full_region_list[0])
         region_drop = tk.OptionMenu(self, tkvar, *full_region_list)
         region_drop.grid(row=1, column=0)
 

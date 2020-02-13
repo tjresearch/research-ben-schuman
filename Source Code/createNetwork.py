@@ -69,6 +69,8 @@ def main():
     svc_class = SVC(kernel='sigmoid')
     svc_class.fit(X_train, y_train)
 
+    dump(svc_class, '../Resources/model.joblib', compress=3)
+
 
 if __name__ == '__main__':
     main()

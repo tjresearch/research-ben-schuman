@@ -22,7 +22,7 @@ def create_mapped_dict(filepath):
     return mapped_dict
 
 
-def run_network(region_text, disaster_text):
+def run_network(region_text, disaster_text, month_idx):
     svc_class = load('../Resources/model.joblib')
     region_dict = create_mapped_dict('../Resources/indexedRegions.xlsx')
     disaster_dict = create_mapped_dict('../Resources/indexedDisasters.xlsx')
@@ -30,7 +30,7 @@ def run_network(region_text, disaster_text):
     region_idx = region_dict[region_text]
     disaster_idx = disaster_dict[disaster_text]
 
-    inputs = np.asarray([[region_idx, disaster_idx]])
+    inputs = np.asarray([[region_idx, disaster_idx, int(month_idx)]])
 
     tk.messagebox.showinfo("Result", str(int(svc_class.predict(inputs)[0])) + ' People')
 
@@ -90,8 +90,13 @@ class Application(tk.Frame):
                                  'Mass Movement', 'Volcanic Activity', 'Severe Winter Condition')
         category.grid(row=3, column=0)
 
-        btn = tk.Button(self.master, text="Run Network", command=lambda:run_network(conversion_dict[tkvar.get()], tkvar2.get()))
-        btn.grid(row=3, column=0)
+        tkvar3 = tk.StringVar(self.master)
+        tkvar3.set("1")
+        month_cat = tk.OptionMenu(self, tkvar3, '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12')
+        month_cat.grid(row=4, column=0)
+
+        btn = tk.Button(self.master, text="Run Network", command=lambda:run_network(conversion_dict[tkvar.get()], tkvar2.get(), tkvar3.get()))
+        btn.grid(row=5, column=0)
 
 
 root = tk.Tk()

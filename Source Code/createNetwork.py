@@ -35,6 +35,13 @@ def build_train_set(region_dict, disaster_dict):
         iso3_code = sheet.cell(i, 0).value
         disaster_type = sheet.cell(i, 6).value
         displacement = sheet.cell(i, 7).value
+        timeframe = sheet.cell(i, 3).value
+
+        #print(timeframe[5:7])
+
+        month_idx = np.asarray([int(timeframe[5:7])])
+
+       # print(one_hot_target)
 
         if iso3_code is None or disaster_type is None or disaster_type == '' or displacement is None or displacement == '':
             continue
@@ -45,11 +52,15 @@ def build_train_set(region_dict, disaster_dict):
 
         reg = [iso3_index]
         region_arr = np.asarray(reg)
+ #       print(region_arr)
 
         dis = [disaster_index]
         disaster_arr = np.asarray(dis)
+#        print(disaster_arr)
 
-        x_train.append(np.concatenate((region_arr, disaster_arr)))
+        total_input = np.concatenate((region_arr, disaster_arr, month_idx))
+
+        x_train.append(total_input)
         y_train.append(displacement)
 
     x = np.asarray(x_train)
@@ -64,10 +75,16 @@ def main():
 
     X, y = build_train_set(region_dict, disaster_dict)
 
+    # nsamples, nx, ny = X.shape
+    # d2_X = X.reshape((nsamples, nx*ny))
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
 
-    svc_class = SVC(kernel='sigmoid')
+    svc_class = SVC(gamma='auto')
     svc_class.fit(X_train, y_train)
+
+    # for i in range(len(X_test)):
+    #     print(y_test[i], svc_class.predict([X_test[i]]))
 
     dump(svc_class, '../Resources/model.joblib', compress=3)
 

@@ -35,6 +35,9 @@ def build_train_set(region_dict, disaster_dict):
         disaster_type = sheet.cell(i, 6).value
         displacement = sheet.cell(i, 7).value
         timeframe = sheet.cell(i, 3).value
+        #
+        # if (displacement < 1000):
+        #     continue
 
         #print(timeframe[5:7])
 
